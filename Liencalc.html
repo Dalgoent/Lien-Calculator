@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Lien Distribution Calculator</title>
+    <style>
+        /* --- Base & Typography --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0; /* Remove default margin */
+            padding: 40px 20px; /* Add padding for scroll */
+            background-color: #12121F; /* Deep dark indigo */
+            color: #E0E0E0; /* Light gray text */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .calculator-container {
+            background-color: #1E1E2F; /* Slightly lighter dark indigo for container */
+            padding: 30px 40px; /* Increased padding */
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3); /* Softer, more prominent shadow */
+            width: 100%;
+            max-width: 780px; /* Slightly wider for more options */
+            margin-bottom: 50px;
+            border: 1px solid #2A2A3F; /* Subtle border */
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #FFFFFF; /* Pure white for main headings */
+            font-weight: 600; /* Bolder */
+        }
+        h1 {
+            font-size: 2.2em; /* Larger */
+            margin-bottom: 30px;
+            color: #66A1FF; /* Accent color for main title */
+            letter-spacing: 0.5px;
+        }
+        h2 {
+            font-size: 1.5em; /* Adjusted for more sections */
+            margin-bottom: 15px;
+            margin-top: 25px;
+            color: #B0C4DE; /* Lighter steel blue */
+            border-bottom: 1px solid #3A3A4F;
+            padding-bottom: 10px;
+            text-align: left; /* Align section headers left */
+        }
+        h3 {
+             font-size: 1.2em; /* Adjusted for sub-sections in results */
+             margin-bottom: 10px;
+             margin-top: 20px;
+             text-align: left;
+             color: #87CEFA; /* Light Sky Blue for result sub-headers */
+        }
+
+        /* --- Input Groups & Forms --- */
+        .input-group, .medical-bill-entry, .target-setting-group {
+            margin-bottom: 20px; /* More spacing */
+        }
+        .input-group label, .medical-bill-entry label, .target-setting-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #B0C4DE; /* Lighter steel blue for labels */
+            font-weight: 500; /* Slightly bolder labels */
+            font-size: 0.95em;
+        }
+        .input-group input[type="number"],
+        .input-group select,
+        .medical-bill-entry input[type="number"],
+        .target-setting-group input[type="number"] {
+            width: 100%; /* Full width */
+            padding: 12px 15px; /* More padding */
+            border: 1px solid #3A3A4F; /* Subtle dark border */
+            border-radius: 6px; /* Softer radius */
+            box-sizing: border-box;
+            background-color: #2A2A3F; /* Dark input background */
+            color: #E0E0E0; /* Light text in inputs */
+            font-size: 1em;
+        }
+        .input-group input[type="number"]:focus,
+        .input-group select:focus,
+        .medical-bill-entry input[type="number"]:focus,
+        .target-setting-group input[type="number"]:focus {
+            outline: none;
+            border-color: #66A1FF; /* Accent border on focus */
+            box-shadow: 0 0 0 3px rgba(102, 161, 255, 0.2); /* Focus ring */
+        }
+
+        .target-setting-group .checkbox-label { /* Specific class for checkbox label */
+            display: inline-flex; 
+            align-items: center;
+            font-weight: bold; /* Make checkbox label bold */
+            color: #E0E0E0; /* Match general text color for emphasis */
+        }
+        .target-setting-group input[type="checkbox"] {
+            margin-right: 10px;
+            vertical-align: middle;
+            transform: scale(1.2); /* Slightly larger checkbox */
+            accent-color: #66A1FF; /* Modern way to style checkbox */
+        }
+        .target-setting-group .sub-input {
+            margin-top: 10px;
+            padding-left: 30px; /* Indent sub-input */
+        }
+        
+        /* --- Buttons --- */
+        button, .add-bill-btn, .remove-bill-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500; /* Bolder button text */
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            text-transform: uppercase; /* Uppercase button text */
+            letter-spacing: 0.5px;
+        }
+        button:active, .add-bill-btn:active, .remove-bill-btn:active {
+            transform: translateY(1px); /* Click effect */
+        }
+
+        button[type="submit"] { /* Main Calculate Button */
+            background-color: #4D88FF; /* Vibrant Blue */
+            color: #FFFFFF;
+            display: block;
+            width: 100%;
+            margin-top: 25px; /* More space above main button */
+            padding: 15px; /* Larger padding for main button */
+            font-size: 1.1em; /* Larger font for main button */
+        }
+        button[type="submit"]:hover { background-color: #3366CC; }
+
+        .add-bill-btn {
+            background-color: #33CC99; /* Teal/Green */
+            color: #12121F; /* Dark text for contrast on lighter green */
+            display: block;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+        .add-bill-btn:hover { background-color: #29A37A; }
+        
+        .medical-bill-entry {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .medical-bill-entry input[type="number"] {
+            flex-grow: 1;
+        }
+        .remove-bill-btn {
+            background-color: #E53E3E; /* Red */
+            color: #FFFFFF;
+            font-size: 0.9em;
+            padding: 10px 15px; /* Adjusted padding */
+            text-transform: none; /* Normal case for remove */
+        }
+        .remove-bill-btn:hover { background-color: #C53030; }
+
+        /* --- Results Area --- */
+        .results {
+            margin-top: 40px; /* More space before results */
+            padding-top: 25px;
+            border-top: 2px solid #66A1FF; /* Accent color top border */
+        }
+        .results .summary-item, .results .target-info-item { /* Combined classes for similar styling */
+            background-color: #2A2A3F; /* Darker than container, same as inputs */
+            padding: 15px; /* More padding */
+            border-radius: 6px;
+            margin-bottom: 12px; /* More spacing */
+            font-size: 1.05em; /* Slightly larger results text */
+            color: #E0E0E0;
+            border-left: 5px solid #4D88FF; /* Consistent accent */
+        }
+        .results strong { /* General strong tag within results */
+            color: #FFFFFF; /* White for strong text in results */
+            font-weight: 600;
+        }
+        .results .highlight { /* For specific highlighted values inside results */
+            color: #87CEFA; /* Light sky blue for highlights */
+            font-weight: 700;
+        }
+        .results table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .results th, .results td {
+            border: 1px solid #3A3A4F; /* Darker border for table */
+            padding: 12px 15px; /* More padding */
+            text-align: left;
+        }
+        .results th {
+            background-color: #3A3A4F; /* Darker header for table */
+            color: #FFFFFF; /* White text for table headers */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+        }
+        .results td {
+            background-color: #2A2A3F; /* Cell background */
+            color: #E0E0E0;
+        }
+         .results td:nth-child(1) { /* First column in table - Original Bill */
+            font-weight: 500;
+         }
+
+        /* --- Error Message --- */
+        .error-message {
+            color: #FFBABA; /* Light red text */
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #4D1F1F; /* Dark red background */
+            border: 1px solid #8C2B2B; /* Reddish border */
+            border-radius: 6px;
+            text-align: center; /* Center error text */
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>Comprehensive Lien Distribution Calculator</h1>
+        <form id="lienForm">
+            <div id="errorMessage" class="error-message" style="display:none;"></div>
+
+            <h2>Settlement & Attorney Details</h2>
+            <div class="input-group">
+                <label for="grossSettlement">Gross Case Settlement Amount ($):</label>
+                <input type="number" id="grossSettlement" placeholder="e.g., 30000" step="0.01" required>
+            </div>
+            <div class="input-group">
+                <label for="feeType">Attorney Fee Type:</label>
+                <select id="feeType">
+                    <option value="percentage" selected>Percentage (%)</option>
+                    <option value="fixed">Fixed Amount ($)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="attorneyFeeValue">Attorney Fee Value:</label>
+                <input type="number" id="attorneyFeeValue" placeholder="e.g., 33.33 or 10000" step="0.01" required>
+            </div>
+            <div class="input-group">
+                <label for="attorneyCaseCosts">Attorney Case Costs ($):</label>
+                <input type="number" id="attorneyCaseCosts" placeholder="e.g., 2000" step="0.01" required>
+            </div>
+
+            <h2>Distribution Targets (Optional)</h2>
+            <div class="target-setting-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="enableClientTarget"> Set Target Client Net Percentage?
+                </label>
+                <div id="clientTargetPercentageContainer" class="sub-input" style="display:none;">
+                    <label for="clientTargetPercentage">Target Client Net (% of available funds after fees/costs):</label>
+                    <input type="number" id="clientTargetPercentage" value="33.33" step="0.01">
+                </div>
+            </div>
+            <div class="target-setting-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="enableMedicalCap"> Set Max Payout Cap for Medical Bills?
+                </label>
+                <div id="medicalCapPercentageContainer" class="sub-input" style="display:none;">
+                    <label for="medicalCapPercentage">Max Payout for Medical Bills (% of available funds after fees/costs):</label>
+                    <input type="number" id="medicalCapPercentage" value="33.33" step="0.01">
+                </div>
+            </div>
+
+
+            <h2>Medical Bills</h2>
+            <div id="medicalBillsContainer">
+                </div>
+            <button type="button" class="add-bill-btn" onclick="addMedicalBillInput()">+ Add Medical Bill</button>
+
+            <button type="submit">Calculate Distribution</button>
+        </form>
+
+        <div class="results" id="resultsArea" style="display:none;">
+            <h2>Calculation Results:</h2>
+            <div class="summary-item" id="fundsAfterFeesCosts"></div>
+            <div class="summary-item" id="totalOriginalMedicalBills"></div>
+            
+            <div id="clientTargetResultsSection" class="target-info-item" style="display:none;">
+                </div>
+            <div id="medicalCapResultsSection" class="target-info-item" style="display:none;">
+                </div>
+            
+            <div class="summary-item" id="finalFundsForProvidersDisplay"></div>
+            
+            <h3>Individual Medical Bill Payments:</h3>
+            <table id="billDetailsTable">
+                <thead>
+                    <tr>
+                        <th>Original Bill ($)</th>
+                        <th>Pro-Rata Share Attempt ($)</th>
+                        <th>Actual Payment ($)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <h3>Final Distribution Summary:</h3>
+            <div class="summary-item" id="totalPaidToProviders"></div>
+            <div class="summary-item" id="finalClientNetAmount"></div>
+            <div class="summary-item" id="finalClientNetPercentage"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            addMedicalBillInput(); // Add one bill input field by default
+
+            // Client Target Checkbox Logic
+            const enableClientTargetCheckbox = document.getElementById('enableClientTarget');
+            const clientTargetPercentageContainer = document.getElementById('clientTargetPercentageContainer');
+            enableClientTargetCheckbox.addEventListener('change', function() {
+                clientTargetPercentageContainer.style.display = this.checked ? 'block' : 'none';
+                if(this.checked) {
+                    document.getElementById('clientTargetPercentage').value = '33.33';
+                }
+            });
+
+            // Medical Cap Checkbox Logic
+            const enableMedicalCapCheckbox = document.getElementById('enableMedicalCap');
+            const medicalCapPercentageContainer = document.getElementById('medicalCapPercentageContainer');
+            enableMedicalCapCheckbox.addEventListener('change', function() {
+                medicalCapPercentageContainer.style.display = this.checked ? 'block' : 'none';
+                if(this.checked) {
+                    document.getElementById('medicalCapPercentage').value = '33.33';
+                }
+            });
+        });
+
+        function addMedicalBillInput() {
+            const container = document.getElementById('medicalBillsContainer');
+            const billEntryDiv = document.createElement('div');
+            billEntryDiv.className = 'medical-bill-entry';
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'medical-bill-input';
+            input.placeholder = 'Enter bill amount (e.g., 100)';
+            input.step = '0.01';
+            // input.required = true; // Making individual bills not strictly required to allow calculation if some are empty initially
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-bill-btn';
+            removeBtn.textContent = 'Remove';
+            removeBtn.onclick = function() { container.removeChild(billEntryDiv); };
+            billEntryDiv.appendChild(input);
+            billEntryDiv.appendChild(removeBtn);
+            container.appendChild(billEntryDiv);
+        }
+
+        document.getElementById('lienForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            calculateDistribution();
+        });
+
+        function calculateDistribution() {
+            const errorDiv = document.getElementById('errorMessage');
+            const resultsArea = document.getElementById('resultsArea');
+            const clientTargetResultsDiv = document.getElementById('clientTargetResultsSection');
+            const medicalCapResultsDiv = document.getElementById('medicalCapResultsSection');
+            
+            // Clear previous states
+            errorDiv.style.display = 'none'; errorDiv.textContent = '';
+            resultsArea.style.display = 'none'; 
+            clientTargetResultsDiv.style.display = 'none'; clientTargetResultsDiv.innerHTML = '';
+            medicalCapResultsDiv.style.display = 'none'; medicalCapResultsDiv.innerHTML = '';
+
+
+            // --- Get Inputs ---
+            const gsa = parseFloat(document.getElementById('grossSettlement').value);
+            const feeType = document.getElementById('feeType').value;
+            const feeValue = parseFloat(document.getElementById('attorneyFeeValue').value);
+            const acc = parseFloat(document.getElementById('attorneyCaseCosts').value);
+            
+            const enableClientTarget = document.getElementById('enableClientTarget').checked;
+            const clientTargetPercentageVal = enableClientTarget ? parseFloat(document.getElementById('clientTargetPercentage').value) : 0;
+            
+            const enableMedicalCap = document.getElementById('enableMedicalCap').checked;
+            const medicalCapPercentageVal = enableMedicalCap ? parseFloat(document.getElementById('medicalCapPercentage').value) : 0;
+
+            let medicalBillsData = []; 
+            let TMB = 0; 
+            const medicalBillInputs = document.querySelectorAll('.medical-bill-input');
+            for (let input of medicalBillInputs) {
+                if (input.value.trim() === '') continue; // Skip empty bill inputs
+                const billAmount = parseFloat(input.value);
+                if (isNaN(billAmount) || billAmount < 0) { 
+                    errorDiv.textContent = 'Medical bill amounts must be valid, non-negative numbers. Empty fields are ignored.';
+                    errorDiv.style.display = 'block'; return;
+                }
+                if (billAmount >= 0) { // Allow zero dollar bills if explicitly entered
+                    medicalBillsData.push({ original: billAmount });
+                    TMB += billAmount;
+                }
+            }
+
+            // --- Validate Main Inputs ---
+            let validationError = false;
+            if (isNaN(gsa) || gsa < 0) { errorDiv.textContent = 'Gross Settlement must be a non-negative number.'; validationError = true; }
+            else if (isNaN(feeValue) || feeValue < 0) { errorDiv.textContent = 'Attorney Fee Value must be a non-negative number.'; validationError = true; }
+            else if (isNaN(acc) || acc < 0) { errorDiv.textContent = 'Attorney Case Costs must be a non-negative number.'; validationError = true; }
+            else if (feeType === 'percentage' && (feeValue > 100)) { errorDiv.textContent = 'Attorney fee percentage cannot exceed 100%.'; validationError = true; }
+            else if (enableClientTarget && (isNaN(clientTargetPercentageVal) || clientTargetPercentageVal < 0 || clientTargetPercentageVal > 100)) {
+                errorDiv.textContent = 'Client Target Percentage must be between 0 and 100.'; validationError = true;
+            } else if (enableMedicalCap && (isNaN(medicalCapPercentageVal) || medicalCapPercentageVal < 0 || medicalCapPercentageVal > 100)) {
+                errorDiv.textContent = 'Medical Bill Cap Percentage must be between 0 and 100.'; validationError = true;
+            }
+
+            if (validationError) { errorDiv.style.display = 'block'; return; }
+
+            // --- Calculate Attorney Fees (AF) ---
+            let af = (feeType === 'percentage') ? (feeValue / 100) * gsa : feeValue;
+
+            // --- Calculate What's Left After Fees/Costs (WL) ---
+            const WL = gsa - af - acc;
+            document.getElementById('fundsAfterFeesCosts').innerHTML = `Funds Available (WL) (after Attny Fees & Costs): <strong class="highlight">$${WL.toFixed(2)}</strong>`;
+            document.getElementById('totalOriginalMedicalBills').innerHTML = `Total Original Medical Bills (TMB): <strong class="highlight">$${TMB.toFixed(2)}</strong>`;
+
+            if (WL < 0) {
+                errorDiv.textContent = 'Deficit: Attorney fees and case costs exceed the gross settlement. No funds available for distribution.';
+                errorDiv.style.display = 'block';
+                // Display what we know, clear the rest
+                resultsArea.style.display = 'block'; // Show basic summary
+                document.getElementById('billDetailsTable').getElementsByTagName('tbody')[0].innerHTML = '';
+                document.getElementById('finalFundsForProvidersDisplay').innerHTML = `Funds Determined for Medical Providers (FTDTMP): <strong class="highlight">$0.00</strong>`;
+                document.getElementById('totalPaidToProviders').innerHTML = `Total Paid to Medical Providers: <strong class="highlight">$0.00</strong>`;
+                document.getElementById('finalClientNetAmount').innerHTML = `FINAL CLIENT NET: <strong class="highlight">$${WL.toFixed(2)}</strong> (Deficit)`;
+                document.getElementById('finalClientNetPercentage').innerHTML = `Actual Client Net Percentage of WL: <strong>N/A</strong>`;
+                return;
+            }
+
+            // --- Determine Funds To Distribute To Medical Providers (FTDTMP) based on targets ---
+            let wl_positive = (WL > 0);
+            let ftdtmp_limit_client = wl_positive ? WL : 0; 
+            let ftdtmp_limit_medical = wl_positive ? WL : 0;
+            
+            let targetClientNetAmountVal = 0;
+            if (enableClientTarget && wl_positive) {
+                clientTargetResultsDiv.style.display = 'block';
+                targetClientNetAmountVal = WL * (clientTargetPercentageVal / 100);
+                ftdtmp_limit_client = Math.max(0, WL - targetClientNetAmountVal);
+                clientTargetResultsDiv.innerHTML = `<strong>Client Target Active:</strong> ${clientTargetPercentageVal.toFixed(2)}% Net for Client.
+                    <br>Target Client Net Amount: <strong class="highlight">$${targetClientNetAmountVal.toFixed(2)}</strong>.
+                    <br>Max for Providers (to meet Client Target): <strong class="highlight">$${ftdtmp_limit_client.toFixed(2)}</strong>.`;
+            }
+
+            let maxFundsForProvidersByCap = 0;
+            if (enableMedicalCap && wl_positive) {
+                medicalCapResultsDiv.style.display = 'block';
+                maxFundsForProvidersByCap = WL * (medicalCapPercentageVal / 100);
+                ftdtmp_limit_medical = Math.max(0, maxFundsForProvidersByCap);
+                medicalCapResultsDiv.innerHTML = `<strong>Medical Cap Active:</strong> Max ${medicalCapPercentageVal.toFixed(2)}% of WL for Medical Bills.
+                    <br>Calculated Max Fund for Providers: <strong class="highlight">$${ftdtmp_limit_medical.toFixed(2)}</strong>.`;
+            }
+            
+            let finalFTDTMP = wl_positive ? WL : 0; // Start with WL if no targets active or WL is positive
+            if (enableClientTarget && enableMedicalCap && wl_positive) {
+                finalFTDTMP = Math.min(ftdtmp_limit_client, ftdtmp_limit_medical);
+            } else if (enableClientTarget && wl_positive) {
+                finalFTDTMP = ftdtmp_limit_client;
+            } else if (enableMedicalCap && wl_positive) {
+                finalFTDTMP = ftdtmp_limit_medical;
+            }
+            if (!wl_positive) finalFTDTMP = 0;
+
+            document.getElementById('finalFundsForProvidersDisplay').innerHTML = `Final Funds Determined for Medical Provider Distribution (FTDTMP): <strong class="highlight">$${finalFTDTMP.toFixed(2)}</strong>`;
+
+            // --- Distribute finalFTDTMP to Medical Providers ---
+            const billDetailsTableBody = document.getElementById('billDetailsTable').getElementsByTagName('tbody')[0];
+            billDetailsTableBody.innerHTML = ''; 
+            let totalPaidToProvidersFinal = 0;
+
+            if (TMB > 0 && finalFTDTMP > 0) {
+                medicalBillsData.forEach(bill => {
+                    const proRataShareAttempt = (bill.original > 0 && TMB > 0) ? (bill.original / TMB) * finalFTDTMP : 0;
+                    const actualPayment = Math.min(proRataShareAttempt, bill.original);
+                    totalPaidToProvidersFinal += actualPayment;
+
+                    const row = billDetailsTableBody.insertRow();
+                    row.insertCell().textContent = `$${bill.original.toFixed(2)}`;
+                    row.insertCell().textContent = `$${proRataShareAttempt.toFixed(2)}`;
+                    row.insertCell().textContent = `$${actualPayment.toFixed(2)}`;
+                });
+            } else { 
+                 medicalBillsData.forEach(bill => { 
+                    const row = billDetailsTableBody.insertRow();
+                    row.insertCell().textContent = `$${bill.original.toFixed(2)}`;
+                    row.insertCell().textContent = `$0.00`;
+                    row.insertCell().textContent = `$0.00`;
+                 });
+            }
+
+            // --- Final Client Net Calculation ---
+            const finalClientNetAmountVal = WL - totalPaidToProvidersFinal;
+            let finalClientNetPercentageValText = "N/A";
+            if (WL > 0) {
+                finalClientNetPercentageValText = `${((finalClientNetAmountVal / WL) * 100).toFixed(2)}%`;
+            } else if (WL === 0 && finalClientNetAmountVal === 0) { // Both WL and client net are 0
+                finalClientNetPercentageValText = "0.00%"; 
+            }
+
+
+            // --- Display Final Results ---
+            document.getElementById('totalPaidToProviders').innerHTML = `Total Paid to Medical Providers: <strong class="highlight">$${totalPaidToProvidersFinal.toFixed(2)}</strong>`;
+            document.getElementById('finalClientNetAmount').innerHTML = `FINAL CLIENT NET: <strong class="highlight">$${finalClientNetAmountVal.toFixed(2)}</strong>`;
+            document.getElementById('finalClientNetPercentage').innerHTML = `Actual Client Net Percentage of WL: <strong class="highlight">${finalClientNetPercentageValText}</strong>`;
+            
+            resultsArea.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
